@@ -1,0 +1,387 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+ no time accumulated
+
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  Ts/call  Ts/call  name    
+  0.00      0.00     0.00      462     0.00     0.00  LSNumWords
+  0.00      0.00     0.00      212     0.00     0.00  LSGetWord
+  0.00      0.00     0.00      152     0.00     0.00  getWord
+  0.00      0.00     0.00       80     0.00     0.00  SSGetWord
+  0.00      0.00     0.00       60     0.00     0.00  WTIsMember
+  0.00      0.00     0.00       30     0.00     0.00  SSGetShiftNum
+  0.00      0.00     0.00       30     0.00     0.00  SSNumWords
+  0.00      0.00     0.00       28     0.00     0.00  LSNumLines
+  0.00      0.00     0.00        2     0.00     0.00  SSNumLines
+  0.00      0.00     0.00        2     0.00     0.00  SSPrintState
+  0.00      0.00     0.00        2     0.00     0.00  SSShiftSort
+  0.00      0.00     0.00        2     0.00     0.00  runTest
+  0.00      0.00     0.00        1     0.00     0.00  SSInit
+  0.00      0.00     0.00        1     0.00     0.00  SSReset
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+ 
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this 
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) no time propagated
+
+index % time    self  children    called     name
+                0.00    0.00      22/462         SSNumWords [7]
+                0.00    0.00      68/462         SSGetWord [4]
+                0.00    0.00      84/462         SSShiftSort [11]
+                0.00    0.00     136/462         lineCompare [19]
+                0.00    0.00     152/462         getWord [3]
+[1]      0.0    0.00    0.00     462         LSNumWords [1]
+-----------------------------------------------
+                0.00    0.00      60/212         SSShiftSort [11]
+                0.00    0.00     152/212         getWord [3]
+[2]      0.0    0.00    0.00     212         LSGetWord [2]
+-----------------------------------------------
+                0.00    0.00      64/152         SSGetWord [4]
+                0.00    0.00      88/152         lineCompare [19]
+[3]      0.0    0.00    0.00     152         getWord [3]
+                0.00    0.00     152/462         LSNumWords [1]
+                0.00    0.00     152/212         LSGetWord [2]
+-----------------------------------------------
+                0.00    0.00      80/80          runTest [12]
+[4]      0.0    0.00    0.00      80         SSGetWord [4]
+                0.00    0.00      68/462         LSNumWords [1]
+                0.00    0.00      64/152         getWord [3]
+-----------------------------------------------
+                0.00    0.00      60/60          SSShiftSort [11]
+[5]      0.0    0.00    0.00      60         WTIsMember [5]
+-----------------------------------------------
+                0.00    0.00      30/30          runTest [12]
+[6]      0.0    0.00    0.00      30         SSGetShiftNum [6]
+-----------------------------------------------
+                0.00    0.00      30/30          runTest [12]
+[7]      0.0    0.00    0.00      30         SSNumWords [7]
+                0.00    0.00      22/462         LSNumWords [1]
+-----------------------------------------------
+                0.00    0.00      28/28          SSShiftSort [11]
+[8]      0.0    0.00    0.00      28         LSNumLines [8]
+-----------------------------------------------
+                0.00    0.00       2/2           runTest [12]
+[9]      0.0    0.00    0.00       2         SSNumLines [9]
+-----------------------------------------------
+                0.00    0.00       2/2           runTest [12]
+[10]     0.0    0.00    0.00       2         SSPrintState [10]
+-----------------------------------------------
+                0.00    0.00       2/2           main [20]
+[11]     0.0    0.00    0.00       2         SSShiftSort [11]
+                0.00    0.00      84/462         LSNumWords [1]
+                0.00    0.00      60/212         LSGetWord [2]
+                0.00    0.00      60/60          WTIsMember [5]
+                0.00    0.00      28/28          LSNumLines [8]
+-----------------------------------------------
+                0.00    0.00       2/2           main [20]
+[12]     0.0    0.00    0.00       2         runTest [12]
+                0.00    0.00      80/80          SSGetWord [4]
+                0.00    0.00      30/30          SSNumWords [7]
+                0.00    0.00      30/30          SSGetShiftNum [6]
+                0.00    0.00       2/2           SSPrintState [10]
+                0.00    0.00       2/2           SSNumLines [9]
+-----------------------------------------------
+                0.00    0.00       1/1           main [20]
+[13]     0.0    0.00    0.00       1         SSInit [13]
+-----------------------------------------------
+                0.00    0.00       1/1           main [20]
+[14]     0.0    0.00    0.00       1         SSReset [14]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+
+Index by function name
+
+   [2] LSGetWord              [13] SSInit                 [11] SSShiftSort
+   [8] LSNumLines              [9] SSNumLines              [5] WTIsMember
+   [1] LSNumWords              [7] SSNumWords              [3] getWord
+   [6] SSGetShiftNum          [10] SSPrintState           [12] runTest
+   [4] SSGetWord              [14] SSReset
+        -:    0:Source:ShiftSort.c
+        -:    0:Graph:ShiftSort.gcno
+        -:    0:Data:ShiftSort.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/********** ShiftSort module---implementation **********/
+        -:    2:
+        -:    3:#include <stdio.h>
+        -:    4:#include <stdlib.h>
+        -:    5:#include "kwic.h"
+        -:    6:#include "LineStorage.h"
+        -:    7:#include "ShiftSort.h"
+        -:    8:
+        -:    9:/***** local constants *****/
+        -:   10:
+        -:   11:/***** local types *****/
+        -:   12:
+        -:   13:typedef struct {
+        -:   14:        int lineNum;
+        -:   15:        int shiftNum;
+        -:   16:} LineList,*LineListPtr;
+        -:   17:
+        -:   18:/***** local variables *****/
+        -:   19:
+        -:   20:static LineListPtr lineList;
+        -:   21:static int lineCount;
+        -:   22:
+        -:   23:/***** state invariant *****
+        -:   24:
+        -:   25:1. lineCount >= 0
+        -:   26:
+        -:   27:2. if lineCount == 0 then
+        -:   28:	lineList == NULL
+        -:   29:
+        -:   30:3. if lineCount > 0
+        -:   31:	lineList is a pointer to an array of lineCount lineLists's
+        -:   32:
+        -:   33:4. forall i in [0..lineCount-1]
+        -:   34:	lineList[i].lineNum in [0..LSNumLines()-1]
+        -:   35:	lineList[i].shiftNum in [0..LSNumWords(lineList[i].lineNum)-1]
+        -:   36:
+        -:   37:*/
+        -:   38:
+        -:   39:/***** local functions *****/
+        -:   40:
+        -:   41:/* return word wordNum from the shifted LineStorage line specified by linePtr */
+      152:   42:static const char* getWord(LineListPtr linePtr,int wordNum)
+        -:   43:{
+        -:   44:        int shiftedWordNum;
+        -:   45:
+      152:   46:        shiftedWordNum = (wordNum+linePtr->shiftNum) %
+        -:   47:		LSNumWords(linePtr->lineNum);
+      152:   48:        return LSGetWord(linePtr->lineNum,shiftedWordNum);
+        -:   49:}
+        -:   50:
+        -:   51:/*
+        -:   52:* if line0 < line1
+        -:   53:*       return a negative value
+        -:   54:* else if line0 == line1
+        -:   55:*       return 0
+        -:   56:* else
+        -:   57:*       return a positive value
+        -:   58:*/
+       40:   59:static int lineCompare(LineListPtr line0,LineListPtr line1)
+        -:   60:{
+        -:   61:        int i,j,minNumWords,minLine;
+        -:   62:
+       40:   63:        if (LSNumWords(line0->lineNum) < LSNumWords(line1->lineNum))
+       10:   64:                minNumWords = LSNumWords(line0->lineNum);
+        -:   65:        else
+       30:   66:                minNumWords = LSNumWords(line1->lineNum);
+       52:   67:        for (i = 0; i < minNumWords; i++) {
+       44:   68:                j = strcmp(getWord(line0,i),getWord(line1,i));
+       44:   69:                if (j != 0)
+       32:   70:                        return j;
+        -:   71:        }
+        -:   72:        /* assert: line0 and line1 are equal for the first min words */
+        8:   73:        return LSNumWords(line0->lineNum) - LSNumWords(line1->lineNum);
+        -:   74:}
+        -:   75:
+        -:   76:/*****exported functions*****/
+        -:   77:
+        1:   78:void SSInit(void)
+        -:   79:{
+        1:   80:        lineList = NULL;
+        1:   81:        lineCount = 0;
+        1:   82:}
+        -:   83:
+        1:   84:void SSReset(void)
+        -:   85:{
+        1:   86:        if (lineList != NULL)
+        1:   87:                free(lineList);
+        1:   88:        lineList = NULL;
+        1:   89:        lineCount = 0;
+        1:   90:}
+        -:   91:
+        2:   92:KWStatus SSShiftSort(void)
+        -:   93:{
+        -:   94:        int i,j,k;
+        -:   95:
+        -:   96:        /* compute the size of lineList */
+        2:   97:        lineCount = 0;
+       14:   98:        for (i = 0; i < LSNumLines(); i++) {
+       42:   99:		for (j = 0; j < LSNumWords(i); j++) {
+        -:  100:			/* exclude lines that start with a noise word */
+       30:  101:			if (!WTIsMember(LSGetWord(i,j)))
+       22:  102:				lineCount++;
+        -:  103:		}
+        -:  104:        }
+        -:  105:
+        -:  106:        /* allocate space for lineList */
+        2:  107:        lineList = calloc(lineCount, sizeof(LineList));
+        2:  108:        if (lineList == NULL) {
+    #####:  109:		lineCount = 0;
+    #####:  110:                return KWMEMORYERROR;
+        -:  111:	}
+        -:  112:
+        -:  113:        /* fill lineList */
+        2:  114:        k = 0;
+       14:  115:        for (i = 0; i < LSNumLines(); i++) {
+       42:  116:                for (j = 0; j < LSNumWords(i); j++) {
+        -:  117:			/* exclude lines that start with a noise word */
+       30:  118:			if (!WTIsMember(LSGetWord(i,j))) {
+       22:  119:				lineList[k].lineNum = i;
+       22:  120:				lineList[k].shiftNum = j;
+       22:  121:				k++;
+        -:  122:			}
+        -:  123:                }
+        -:  124:        }
+        -:  125:
+        -:  126:        /* sort the shifted lines */
+        2:  127:        qsort(lineList,lineCount,sizeof(LineList),
+        -:  128:                (int (*)(const void *, const void *))lineCompare);
+        -:  129:
+        2:  130:        return KWSUCCESS;
+        -:  131:}
+        -:  132:
+       80:  133:const char* SSGetWord(int lineNum,int wordNum)
+        -:  134:{
+      148:  135:        if (lineNum < 0 || lineNum >= lineCount || wordNum < 0 ||
+       68:  136:			wordNum >= LSNumWords(lineList[lineNum].lineNum))
+       16:  137:                return NULL;
+        -:  138:        else
+       64:  139:                return getWord(&lineList[lineNum],wordNum);
+        -:  140:}
+        -:  141:
+       30:  142:int SSNumWords(int lineNum)
+        -:  143:{
+       30:  144:        if (lineNum < 0 || lineNum >= lineCount)
+        8:  145:                return(KWRANGEERROR);
+        -:  146:        else
+       22:  147:                return(LSNumWords(lineList[lineNum].lineNum));
+        -:  148:}
+        -:  149:
+       30:  150:int SSGetShiftNum(int lineNum)
+        -:  151:{
+       30:  152:        if (lineNum < 0 || lineNum >= lineCount)
+        8:  153:                return(KWRANGEERROR);
+        -:  154:        else
+       22:  155:                return(lineList[lineNum].shiftNum);
+        -:  156:}
+        -:  157:
+        2:  158:int SSNumLines(void)
+        -:  159:{
+        2:  160:        return(lineCount);
+        -:  161:}
+        -:  162:
+        2:  163:void SSPrintState(void)
+        -:  164:{
+        -:  165:        int i;
+        -:  166:
+       24:  167:        for (i = 0; i < lineCount; i++)
+       44:  168:                printf("lineList[%d]: lineNum=%d shiftNum=%d\n",
+       44:  169:                        i,lineList[i].lineNum,lineList[i].shiftNum);
+        2:  170:}
+File 'ShiftSort.c'
+Lines executed:96.72% of 61
+ShiftSort.c:creating 'ShiftSort.c.gcov'
+
