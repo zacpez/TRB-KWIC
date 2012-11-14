@@ -4,8 +4,8 @@
 #include "kwic.h"
 #include "LineStorage.h"
 
-#define NUMLINES 5
-#define MAXWORDS 6
+#define NUMLINES 16
+#define MAXWORDS 8
 
 struct {
 	int numWords;
@@ -15,7 +15,18 @@ struct {
 	{4,"The","C","Programming","Language"},
 	{0},
 	{1,"xxx"},
-	{3,"","x","01234567890123456789012345678901234567890123456789"}
+	{3,"","x","01234567890123456789012345678901234567890123456789"},
+	{7,"There","is","no","future","in","time","travel"},
+	{6,"I","bought","a","portable","cable","TV"},
+	{7,"Entropy","isn't","what","it","used","to","be"},
+	{7,"You","can","observe","a","lot","by","watching"},
+	{7,"Learning","is","the","evolutions","of","the","mind"},
+	{8,"Windows","is","a","colorful","clown","suit","for","DOS"},
+	{7,"I'd","kill","for","a","Nobel","Peace","Prize"},
+	{5,"Hindsight","is","an","exact","science"},
+	{6,"One","planet","is","all","you","get"},
+	{6,"Two","wrongs","are","only","the","beginning"},
+	{5,"Plan","to","be","spontaneous","tomorrow"}
 };
 
 static int errorCount = 0;
@@ -129,6 +140,7 @@ int main()
 
 	printf("run the tests again\n");
 	runTest();
+	LSPrintState();
 
 	if (errorCount == 0)
 		printf("\n\nNo errors detected!\n");
