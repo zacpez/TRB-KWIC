@@ -5,7 +5,7 @@
 #include "LineStorage.h"
 #include "ShiftSort.h"
 
-#define MAXWORDS 6
+#define MAXWORDS 10
 
 static struct {
 	int numWords;
@@ -38,6 +38,9 @@ static void runTest()
 	numLines = 0;
 	for (i = 0; lineList[numLines].numWords != 0; i++)
 		numLines++;
+
+	printf("Using the SSPrintState function\n");
+        SSPrintState();
 
 	printf("check that the lines have been shifted and sorted\n");
 	if (SSNumLines() != numLines) {

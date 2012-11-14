@@ -30,7 +30,7 @@
 MODULES = Input LineStorage ShiftSort Output WordTable
 
 # Default compilation flags for IBM xlc compiler
-CFLAGS = -g
+CFLAGS = -p -g
 
 # Directory holding all the .h files
 INC = include
@@ -59,6 +59,15 @@ impMod:
 gdb:	kwic
 	gdb -d ShiftSort -d WordTable -d Input -d Output \
 		-d LineStorage kwic
+prof: kwic
+# test each module first
+	for m in $(MODULES); do \
+		( cd $$m; $(MAKE) 'CFLAGS=$(CFLAGS)' runtest; ) \
+	done
+#
+# use a large input file
+	./kwic -n noiseWords < input/test4 > actualOutput/test4
+	gprof kwic > ProfileReport
 
 runtest: kwic
 # test each module first
@@ -105,4 +114,4 @@ clean:
 	for m in $(MODULES); do \
 		( cd $$m; $(MAKE) clean; ) \
 	done
-	rm -f kwic core mon.out gmon.out *.o actualOutput/*
+	rm -f kwic core mon.out gmon.out *.o actualOutput/* ProfileReport
