@@ -5,6 +5,8 @@
 #include "Output.h"
 #include "ShiftSort.h"
 
+
+#define MAXLINE 40
 /***** local constants *****/
 
 /***** local types *****/
@@ -18,24 +20,34 @@ void OUInit(void)
 
 void OUPrint(void)
 {
-	int i,j;
-
-	for (i = 0; i < SSNumLines(); i++) {
-		int numWords = SSNumWords(i);
-		for (j = 0; j < numWords; j++) {
-			int shiftNum = SSGetShiftNum(i);
-			printf("%s",SSGetWord(i,j));
-
-			/* no comma if line is unshifted
-			 * otherwise comma follows last word on original line
-			 */
-			if (shiftNum != 0 && j == numWords-shiftNum-1)
-				printf(",");
-
-			/* space follows every word but the last */
-			if (j != SSNumWords(i)-1)
-				printf(" ");
+	int curLine;
+	int curWord;
+	int numLines = SSNumLines();
+	int numChars = 0;
+	const char* getWord;
+	int numCharsGetWord = 0;
+	for (curLine = 0; curLine < numLines; curLine++) {
+		int numWords = SSNumWords(curLine);
+                int shiftNum = SSGetShiftNum(curLine);
+		numChars = 0;
+		// get num of chars after rotate
+		for (curWord = numWords-shiftNum; curWord < numWords; curWord++) {
+			getWord = SSGetWord(curLine, curWord);
+			numCharsGetWord = 0;
+			while(getWord[numCharsGetWord++] != '\0')
+				numChars++;
+			// +1 for space after word
+			numChars++;
 		}
+		// add spaces
+		while(41 - numChars++ > 0)
+			printf(" ");
+		for (curWord = numWords-shiftNum; curWord < numWords; curWord++)
+			printf("%s ", SSGetWord(curLine, curWord));
+		printf("%s", SSGetWord(curLine, 0));
+		for(curWord = 1; curWord < numWords-shiftNum; curWord++)
+			printf(" %s", SSGetWord(curLine, curWord));
 		printf("\n");
 	}
+	
 }
