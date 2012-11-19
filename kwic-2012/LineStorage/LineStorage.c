@@ -10,51 +10,28 @@
 
 /***** local types *****/
 
-/*Each line is a list of WordNodes.*/
-typedef struct WordNode {
-	char* word;
-	struct WordNode* nextWordPtr;
-} WordNode;
-typedef WordNode* WordNodePtr;
-
-/*The LineStorage module stores a list of LineNodes*/
-typedef struct LineNode {
-	struct LineNode* nextLinePtr;
-	WordNodePtr headWordPtr;
-	WordNodePtr tailWordPtr;
-	int wordCount;
-} LineNode;
-typedef LineNode* LineNodePtr;
-
 /***** local variables *****/
 
-static LineNodePtr headLinePtr, tailLinePtr;
-static int lineCount;
+#define MAXWORD 40
+#define MAXLINE 20
+
+
+long unsigned int lineSize = 0;
+long unsigned int lineCount = 0;
+
+struct Line{
+	long unsigned int wordSize;
+	long unsigned int wordCount;
+	char** word;
+}* line;
+
+
+#ifndef NULL
+#define NULL 0
+#endif
+
 
 /***** state invariant *****
-
-1. if lineCount == 0 then
-	headlinePtr == NULL
-	taillinePtr == NULL
-   else
-	headLinePtr points to a null-terminated linked list of LineNodes.
-	tailLinePtr points to the last LineNode in this list.
-	There are lineCount LineNodes in this list.
-
-2. for every LineNode allocated by LineStorage
-	if wordCount == 0 then
-	    headWordPtr == NULL
-	    tailWordPtr == NULL
-	else
-	    headWordPtr points to a null-terminated linked list of WordNodes.
-	    tailWordPtr points to the last WordNode in this list.
-	    There are wordCount WordNodes in this list.
-
-3. For every WordNode allocated word is a null-terminated array of characters.
-
-4. All of the dynamic memory allocated by LineStorage (and not yet freed)
-   is in the list structure headed by headLinePtr.
-*/
 
 /***** local functions *****/
 
@@ -65,19 +42,16 @@ static int lineCount;
 *	return NULL
 * Assumed: the state invariant holds
 */
-static LineNodePtr getLine(int i)
+
+/*
+static char* getLine(int i)
 {
-	LineNodePtr tmpLinePtr;
-
-	if (i < 0)
+	
+	if (i < 0 || i > linesSize)
 		return NULL;
-	for (tmpLinePtr = headLinePtr;
-			i-- > 0 && tmpLinePtr != NULL;
-			tmpLinePtr = tmpLinePtr->nextLinePtr)
-		;
-	return tmpLinePtr;
+	return lines[i];
 }
-
+*/
 /*
 * if wordNodePtr != NULL && the list headed by wordNodePtr has >= i words then
 *	return a pointer to the ith word in the list headed by wordNodePtr
@@ -85,131 +59,153 @@ static LineNodePtr getLine(int i)
 *	return NULL
 * Assumed: wordNodePtr is either NULL or a pointer to a list of WordNodes
 */
-static WordNodePtr getWord(WordNodePtr wordNodePtr,int i)
+/*
+static char* getWord(int lineIndex,int wordIndex)
 {
-	if (i < 0)
+	if (lineIndex < 0 || lineIndex > MAXLINE || wordIndex < 0 || wordIndex > MAXLINE)
 		return NULL;
-	while (i-- > 0 && wordNodePtr != NULL) {
-		wordNodePtr = wordNodePtr->nextWordPtr;
-	}
-	return wordNodePtr;
+	return lines[lineIndex][wordIndex];
 }
-
+*/
 /***** exported functions *****/
 
 void LSInit(void)
 {
-	headLinePtr = NULL;
-	tailLinePtr = NULL;
+	line = NULL;
+	lineSize = 0;
 	lineCount = 0;
 }
 
 void LSReset(void)
 {
-	LineNodePtr tmpLinePtr;
-	WordNodePtr tmpWordPtr0,tmpWordPtr1;
-
-	while (headLinePtr != NULL) {
-		tmpWordPtr0 = headLinePtr->headWordPtr;
-		while (tmpWordPtr0 != NULL) {
-			tmpWordPtr1 = tmpWordPtr0->nextWordPtr;
-			free(tmpWordPtr0->word);
-			free(tmpWordPtr0);
-			tmpWordPtr0 = tmpWordPtr1;
+	if(line){
+		int rmline;
+		int rmword;
+		for(rmline = 0; rmline < lineCount; rmline++){
+			for(rmword = 0; rmword < line[rmline].wordCount; rmword++){
+				free(line[rmline].word[rmword]);
+			}
+			free(line[rmline].word);	
 		}
-		tmpLinePtr = headLinePtr;
-		headLinePtr = headLinePtr->nextLinePtr;
-		free(tmpLinePtr);
+		free(line);
 	}
+	line = NULL;
+	lineSize = 0;
 	lineCount = 0;
-	tailLinePtr = NULL;
 }
 
 KWStatus LSAddLine(void)
 {
-	LineNodePtr newLinePtr;
+	//printf("Befor lineCoutn = %i lineSize = %i\n", lineCount, lineSize);
+	if(line == NULL){
+		if(!(line = malloc(sizeof(*line)))){
+	//		printf("mem5\n");
+			return KWMEMORYERROR;
+		}
+		lineSize = 1;
+	} else if (lineCount >= lineSize){
+		line = realloc(line, sizeof(*line)*lineSize*2);
+		if(!line){
+	//		printf("Out of mem\n");
+			return KWMEMORYERROR;
+		}
+		//memset(((void*)(*line) + sizeof(*line)*(lineSize)), '\0', sizeof(*line)*(lineSize));
+		lineSize *= 2;
+	} 
 
 	/* create and fill a LineNode */
-	newLinePtr = malloc(sizeof(LineNode));
-	if (newLinePtr == NULL)
-		return KWMEMORYERROR;
+	line[lineCount].wordCount = 0;
+	line[lineCount].wordSize = 0;
+	line[lineCount].word = NULL;
 	lineCount++;
-	newLinePtr->nextLinePtr = NULL;
-	newLinePtr->headWordPtr = NULL;
-	newLinePtr->tailWordPtr = NULL;
-	newLinePtr->wordCount = 0;
+        //printf("AFTER lineCount = %i\n linesSize = %i\n", lineCount, linesSize);
+        //printf("AFTER lineCoutn = %i lineSize = %i\n", lineCount, lineSize);
 
-	/* link in the new LineNode */
-	if (tailLinePtr == NULL) {
-		headLinePtr = newLinePtr;
-	} else {
-		tailLinePtr->nextLinePtr = newLinePtr;
-	}
-	tailLinePtr = newLinePtr;
 	return KWSUCCESS;
 }
 
 KWStatus LSAddWord(char* word)
 {
-	WordNodePtr newWordPtr;
-
-	if (tailLinePtr == NULL)
+	if(!line||line[lineCount-1].wordCount > MAXWORD){
+	//	printf("range error word = %i\n", line[lineCount-1].wordCount);
 		return KWRANGEERROR;
+	//	return KWMEMORYERROR;
+	}
 
-	/* create and fill a WordNode */
-	newWordPtr = malloc(sizeof(WordNode));
-	if (newWordPtr == NULL)
-		return KWMEMORYERROR;
-	newWordPtr->word = malloc(strlen(word)+1);
-	if (newWordPtr->word == NULL) {
-		free(newWordPtr);
+	if(line[lineCount-1].word == NULL){
+	//	printf("gothere\n");
+		line[lineCount-1].word = malloc(sizeof(char**)*5);
+	//	printf("please\n");
+		if(!line){
+	//		printf("mem1\n");
+			return KWMEMORYERROR;
+		}
+		line[lineCount-1].wordSize = 5;
+	} else if(line[lineCount-1].wordCount >= line[lineCount-1].wordSize){
+		if(!(line[lineCount-1].word = realloc(line[lineCount-1].word, sizeof(char**) * line[lineCount-1].wordSize * 2 ))){
+	//		printf("mem2\n");
+			return KWMEMORYERROR;
+		}
+		line[lineCount-1].wordSize *= 2;
+	}
+	
+
+	int charCount;
+
+	if(!(line[lineCount-1].word[line[lineCount-1].wordCount] = malloc(sizeof(char*)*5))){
+	//	printf("mem3\n");
 		return KWMEMORYERROR;
 	}
-	tailLinePtr->wordCount++;
-	strcpy(newWordPtr->word,word);
-	newWordPtr->nextWordPtr = NULL;
+	int stringSize = 5;
+
+	for(charCount =0 ; word[charCount] != 0 ; charCount ++){
+		if (charCount > stringSize){
+			if(!(line[lineCount-1].word[line[lineCount-1].wordCount] = realloc(line[lineCount-1].word[line[lineCount-1].wordCount], sizeof(char*) * stringSize *2))){
+	//			printf("mem4\n");
+				return KWMEMORYERROR;
+			}
+			stringSize *=2;
+		}
+			
+		line[lineCount-1].word[line[lineCount-1].wordCount][charCount] = word[charCount];
+	}
+	if(charCount > stringSize)
+		if(!(line[lineCount-1].word[line[lineCount-1].wordCount] = realloc(line[lineCount-1].word[line[lineCount-1].wordCount], sizeof(char*) * (stringSize +1)))){
+	//		printf("mem5\n");
+			return KWMEMORYERROR;
+		}
+	line[lineCount-1].word[line[lineCount-1].wordCount][charCount] = '\0';
+
+	//strcpy(lines[lineCount][wordCount] ,word);
+	
 
 	/* link in the new WordNode */
-	if (tailLinePtr->tailWordPtr == NULL) { /* empty line */
-		tailLinePtr->headWordPtr = newWordPtr;
-	} else {
-		tailLinePtr->tailWordPtr->nextWordPtr = newWordPtr;
-	}
-	tailLinePtr->tailWordPtr = newWordPtr;
+	line[lineCount-1].wordCount++;
+
 	return KWSUCCESS;
 }
 
 const char* LSGetWord(int lineNum,int wordNum)
 {
-	LineNodePtr tmpLinePtr;
-	WordNodePtr tmpWordPtr;
 
-	if (lineNum >= lineCount)
+	if (lineNum >= lineCount || lineNum < 0 || wordNum < 0 || wordNum >= line[lineNum].wordCount)
 		return NULL;
-
-	/* find line LineNum */
-	tmpLinePtr = getLine(lineNum);
-	if (tmpLinePtr == NULL)
-		return NULL;
-
-	/* find word wordNum */
-	tmpWordPtr = getWord(tmpLinePtr->headWordPtr,wordNum);
-	if (tmpWordPtr == NULL)
-		return NULL;
-	return tmpWordPtr->word;
+	return line[lineNum].word[wordNum];
 }
 
 int LSNumWords(int lineNum)
 {
-	LineNodePtr tmpLinePtr;
-
 	/* find line lineNum */
-	tmpLinePtr = getLine(lineNum);
-	if (tmpLinePtr == NULL) {
+	/* count the words in line lineNum */
+
+	if(lineNum < 0 || lineNum >= lineCount){
+	//	printf("ragng\n");
 		return KWRANGEERROR;
 	}
-	/* count the words in line lineNum */
-	return tmpLinePtr->wordCount;
+	
+	return line[lineNum].wordCount;
+
+
 }
 
 int LSNumLines(void)
@@ -218,7 +214,9 @@ int LSNumLines(void)
 }
 
 void LSPrintState(void)
-{
+{return;
+}
+/*
 	LineNodePtr tmpLinePtr;
 	WordNodePtr tmpWordPtr;
 
@@ -234,4 +232,4 @@ void LSPrintState(void)
 		}
 		printf("!\n");
 	}
-}
+}*/
