@@ -15,58 +15,34 @@
 #define MAXWORD 40
 #define MAXLINE 20
 
-
-long unsigned int lineSize = 0;
-long unsigned int lineCount = 0;
-
-struct Line{
-	long unsigned int wordSize;
-	long unsigned int wordCount;
-	char** word;
-}* line;
-
-
 #ifndef NULL
 #define NULL 0
 #endif
+
+
+
+// Currently allocated lines
+long unsigned int lineSize = 0;
+
+// Number of lines;
+long unsigned int lineCount = 0;
+
+struct Line{
+	// Number of words word can hold, used for dynamic allocation of word
+	long unsigned int wordSize;
+	// Number of words in Line
+	long unsigned int wordCount;
+
+	// points to dynamic array of words
+	char** word;
+}* line;
+
 
 
 /***** state invariant *****
 
 /***** local functions *****/
 
-/*
-* if headLinePtr contains at least i+1 LineNodes then
-*	return the address of the ith LineNode
-* else
-*	return NULL
-* Assumed: the state invariant holds
-*/
-
-/*
-static char* getLine(int i)
-{
-	
-	if (i < 0 || i > linesSize)
-		return NULL;
-	return lines[i];
-}
-*/
-/*
-* if wordNodePtr != NULL && the list headed by wordNodePtr has >= i words then
-*	return a pointer to the ith word in the list headed by wordNodePtr
-* else
-*	return NULL
-* Assumed: wordNodePtr is either NULL or a pointer to a list of WordNodes
-*/
-/*
-static char* getWord(int lineIndex,int wordIndex)
-{
-	if (lineIndex < 0 || lineIndex > MAXLINE || wordIndex < 0 || wordIndex > MAXLINE)
-		return NULL;
-	return lines[lineIndex][wordIndex];
-}
-*/
 /***** exported functions *****/
 
 void LSInit(void)
@@ -76,6 +52,8 @@ void LSInit(void)
 	lineCount = 0;
 }
 
+
+// TODO: Test for mem leaks
 void LSReset(void)
 {
 	if(line){
@@ -94,9 +72,10 @@ void LSReset(void)
 	lineCount = 0;
 }
 
+
+
 KWStatus LSAddLine(void)
 {
-	//printf("Befor lineCoutn = %i lineSize = %i\n", lineCount, lineSize);
 	if(line == NULL){
 		if(!(line = malloc(sizeof(*line)))){
 	//		printf("mem5\n");
@@ -109,7 +88,6 @@ KWStatus LSAddLine(void)
 	//		printf("Out of mem\n");
 			return KWMEMORYERROR;
 		}
-		//memset(((void*)(*line) + sizeof(*line)*(lineSize)), '\0', sizeof(*line)*(lineSize));
 		lineSize *= 2;
 	} 
 
@@ -118,29 +96,30 @@ KWStatus LSAddLine(void)
 	line[lineCount].wordSize = 0;
 	line[lineCount].word = NULL;
 	lineCount++;
-        //printf("AFTER lineCount = %i\n linesSize = %i\n", lineCount, linesSize);
-        //printf("AFTER lineCoutn = %i lineSize = %i\n", lineCount, lineSize);
 
 	return KWSUCCESS;
 }
 
 KWStatus LSAddWord(char* word)
 {
-	if(!line||line[lineCount-1].wordCount > MAXWORD){
+
+	
+	// if line has not yet been allocated or wordCount is full for the current line return KWRANGERROR
+	if(!line||line[lineCount-1].wordCount > MAXLINE){
 	//	printf("range error word = %i\n", line[lineCount-1].wordCount);
 		return KWRANGEERROR;
-	//	return KWMEMORYERROR;
 	}
 
+	// if first word on line, allocate space for 5 words.
 	if(line[lineCount-1].word == NULL){
-	//	printf("gothere\n");
 		line[lineCount-1].word = malloc(sizeof(char**)*5);
-	//	printf("please\n");
 		if(!line){
 	//		printf("mem1\n");
 			return KWMEMORYERROR;
 		}
 		line[lineCount-1].wordSize = 5;
+
+	// if current allocated space is full, reallocate 2 times current size
 	} else if(line[lineCount-1].wordCount >= line[lineCount-1].wordSize){
 		if(!(line[lineCount-1].word = realloc(line[lineCount-1].word, sizeof(char**) * line[lineCount-1].wordSize * 2 ))){
 	//		printf("mem2\n");
@@ -150,15 +129,20 @@ KWStatus LSAddWord(char* word)
 	}
 	
 
-	int charCount;
 
+	// allocate space for 5 characters for the current word
 	if(!(line[lineCount-1].word[line[lineCount-1].wordCount] = malloc(sizeof(char*)*5))){
 	//	printf("mem3\n");
 		return KWMEMORYERROR;
 	}
+
+	// allocated size for characters
 	int stringSize = 5;
 
+	int charCount;
 	for(charCount =0 ; word[charCount] != 0 ; charCount ++){
+
+		// if out of space for string, reallocate 2 times current size
 		if (charCount > stringSize){
 			if(!(line[lineCount-1].word[line[lineCount-1].wordCount] = realloc(line[lineCount-1].word[line[lineCount-1].wordCount], sizeof(char*) * stringSize *2))){
 	//			printf("mem4\n");
@@ -166,20 +150,19 @@ KWStatus LSAddWord(char* word)
 			}
 			stringSize *=2;
 		}
-			
+		// copy char to string from given word
 		line[lineCount-1].word[line[lineCount-1].wordCount][charCount] = word[charCount];
 	}
+
+	// if no room for null char, allocate 1 extra char
 	if(charCount > stringSize)
 		if(!(line[lineCount-1].word[line[lineCount-1].wordCount] = realloc(line[lineCount-1].word[line[lineCount-1].wordCount], sizeof(char*) * (stringSize +1)))){
 	//		printf("mem5\n");
 			return KWMEMORYERROR;
 		}
+	// add null termanint
 	line[lineCount-1].word[line[lineCount-1].wordCount][charCount] = '\0';
 
-	//strcpy(lines[lineCount][wordCount] ,word);
-	
-
-	/* link in the new WordNode */
 	line[lineCount-1].wordCount++;
 
 	return KWSUCCESS;
@@ -187,7 +170,7 @@ KWStatus LSAddWord(char* word)
 
 const char* LSGetWord(int lineNum,int wordNum)
 {
-
+	// bound check
 	if (lineNum >= lineCount || lineNum < 0 || wordNum < 0 || wordNum >= line[lineNum].wordCount)
 		return NULL;
 	return line[lineNum].word[wordNum];
@@ -195,9 +178,7 @@ const char* LSGetWord(int lineNum,int wordNum)
 
 int LSNumWords(int lineNum)
 {
-	/* find line lineNum */
-	/* count the words in line lineNum */
-
+	// bound check
 	if(lineNum < 0 || lineNum >= lineCount){
 	//	printf("ragng\n");
 		return KWRANGEERROR;
@@ -213,6 +194,8 @@ int LSNumLines(void)
 	return lineCount;
 }
 
+
+// TODO: program useless fuction
 void LSPrintState(void)
 {return;
 }
