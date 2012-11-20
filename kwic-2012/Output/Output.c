@@ -40,7 +40,7 @@ void OUPrint(void)
 			numChars++;
 		}
 		// add spaces
-		while(41 - numChars++ > 0)
+		while(39 - numChars++ > 0)
 			printf(" ");
 		for (curWord = numWords-shiftNum; curWord < numWords; curWord++)
 			printf("%s ", SSGetWord(curLine, curWord));
