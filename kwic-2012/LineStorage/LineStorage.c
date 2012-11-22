@@ -1,8 +1,8 @@
 /********** LineStorage module---implementation **********/
 
-#include <stdio.h>
+//#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+//#include <string.h>
 #include "kwic.h"
 #include "LineStorage.h"
 
@@ -28,10 +28,10 @@ long unsigned int lineSize = 0;
 long unsigned int lineCount = 0;
 
 struct Line{
-	// Number of words word can hold, used for dynamic allocation of word
-	long unsigned int wordSize;
-	// Number of words in Line
-	long unsigned int wordCount;
+	// Number of words word can hold, used for dynamic allocation of word, uses char to save memory
+	unsigned char wordSize;
+	// Number of words in Line, uses char to save memory
+	unsigned char wordCount;
 
 	// points to dynamic array of words
 	char** word;
@@ -103,7 +103,6 @@ KWStatus LSAddLine(void)
 KWStatus LSAddWord(char* word)
 {
 
-	
 	// if line has not yet been allocated or wordCount is full for the current line return KWRANGERROR
 	if(!line||line[lineCount-1].wordCount > MAXLINE){
 	//	printf("range error word = %i\n", line[lineCount-1].wordCount);
@@ -128,19 +127,16 @@ KWStatus LSAddWord(char* word)
 		line[lineCount-1].wordSize *= 2;
 	}
 	
-
-
 	// allocate space for 5 characters for the current word
 	if(!(line[lineCount-1].word[line[lineCount-1].wordCount] = malloc(sizeof(char*)*5))){
 	//	printf("mem3\n");
 		return KWMEMORYERROR;
 	}
-
 	// allocated size for characters
 	int stringSize = 5;
 
 	int charCount;
-	for(charCount =0 ; word[charCount] != 0 ; charCount ++){
+	for(charCount = 0; word[charCount] != 0 ; charCount++){
 
 		// if out of space for string, reallocate 2 times current size
 		if (charCount > stringSize){
@@ -180,7 +176,7 @@ int LSNumWords(int lineNum)
 {
 	// bound check
 	if(lineNum < 0 || lineNum >= lineCount){
-	//	printf("ragng\n");
+	//	printf("range\n");
 		return KWRANGEERROR;
 	}
 	
@@ -197,7 +193,8 @@ int LSNumLines(void)
 
 // TODO: program useless fuction
 void LSPrintState(void)
-{return;
+{
+return;
 }
 /*
 	LineNodePtr tmpLinePtr;
