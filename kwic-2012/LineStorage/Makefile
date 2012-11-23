@@ -4,8 +4,13 @@ XCFLAGS = -I$(INC) ## extra C flags
 
 CC = gcc $(XCFLAGS)
 
+CFLAGS = -g
+
 driver: driver.o LineStorage.o
 	$(CC) -o driver driver.o LineStorage.o
+
+memtest: memtest.o LineStorage.o
+	$(CC) -o memtest memtest.o LineStorage.o
 
 runtest: driver
 	./driver
@@ -24,6 +29,9 @@ driver.o: $(INC)/kwic.h $(INC)/LineStorage.h driver.c
 
 LineStorage.o: $(INC)/kwic.h $(INC)/LineStorage.h LineStorage.c
 	$(CC) -c $(CFLAGS) LineStorage.c
+
+memtest.o: $(INC)/kwic.h $(INC)/LineStorage.h memtest.c
+	$(CC) -c $(CFLAGS) memtest.c
 
 clean:
 	rm -f *.o act/* driver *.gcov *.gcda *.gcno
