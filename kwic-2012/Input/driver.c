@@ -12,5 +12,7 @@ int main(int argc,char* argv[])
 		INLoad(NULL);
 	else
 		INLoad(argv[1]);
+   
+   INLoad("meowow");
 	return 0;
 }
