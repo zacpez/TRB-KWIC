@@ -33,9 +33,12 @@ int main()
 {
 	int b,i;
 
+   if (WTInit("NotAFile") != KWSUCCESS) {
+		printf("could not read testNoiseWords file\n");
+	}
+
 	if (WTInit("testNoiseWords") != KWSUCCESS) {
 		printf("could not read testNoiseWords file\n");
-		exit(1);
 	}
 
 	printf("Check words that should be in WordTable\n");
@@ -59,6 +62,60 @@ int main()
 			errorCount++;
 		}
 	}
+
+   if (WTInit("testNoiseWords2") != KWSUCCESS) {
+		printf("could not read testNoiseWords file\n");
+	}
+
+	printf("Check words that should be in WordTable\n");
+	for (i = 0; inWordList[i]; i++) {
+		printf("\tChecking word: \"%s\"\n",inWordList[i]);
+		b = WTIsMember(inWordList[i]);
+		if (!b) {
+			printf("Error in WTIsMember return value.");
+			printf("Actual: %d  Expected: 1\n",b);
+			errorCount++;
+		}
+	}
+
+	printf("\nCheck words that should not be in WordTable\n");
+	for (i = 0; notInWordList[i]; i++) {
+		printf("\tChecking word: \"%s\"\n",notInWordList[i]);
+		b = WTIsMember(notInWordList[i]);
+		if (b) {
+			printf("Error in WTIsMember return vlaue.");
+			printf("Actual: %d  Expected: 0",b);
+			errorCount++;
+		}
+	}
+
+   if (WTInit("testNoiseWords3") != KWSUCCESS) {
+		printf("could not read testNoiseWords file\n");
+	}
+
+	printf("Check words that should be in WordTable\n");
+	for (i = 0; inWordList[i]; i++) {
+		printf("\tChecking word: \"%s\"\n",inWordList[i]);
+		b = WTIsMember(inWordList[i]);
+		if (!b) {
+			printf("Error in WTIsMember return value.");
+			printf("Actual: %d  Expected: 1\n",b);
+			errorCount++;
+		}
+	}
+
+	printf("\nCheck words that should not be in WordTable\n");
+	for (i = 0; notInWordList[i]; i++) {
+		printf("\tChecking word: \"%s\"\n",notInWordList[i]);
+		b = WTIsMember(notInWordList[i]);
+		if (b) {
+			printf("Error in WTIsMember return vlaue.");
+			printf("Actual: %d  Expected: 0",b);
+			errorCount++;
+		}
+	}
+
+   WTPrintState();
 
 	if (errorCount == 0)
 		printf("\n\nNo errors detected!\n");
