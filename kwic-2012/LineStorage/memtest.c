@@ -3,12 +3,11 @@
 
 /*******************************
         Used to test Reset function for Memory leaks
-        
-	
-        Inserts lineList into LineStorage then resets LineStorage and loop forever
+
+        Inserts lineList into LineStorage then resets LineStorage and loop untill error
 
 	check for mem Increase with 'watch "ps aux|grep memtest"'
-
+*******************************/
 
 
 #include <stdio.h>
@@ -40,6 +39,8 @@ struct {
 	{5,"Plan","to","be","spontaneous","tomorrow"}
 };
 
+static int error = 0;
+
 static void runTest()
 {
 	int i,j,status;
@@ -52,7 +53,7 @@ static void runTest()
 		if (status != KWSUCCESS) {
 			printf("Error in LSAddLine return value.");
 			printf(" Actual: %d Expected: %d\n",status,KWSUCCESS);
-			errorCount++;
+			error = 1;
 		}
 		for (j = 0; j < lineList[i].numWords; j++) {
 			printf("\t\tword %d\n",j);
@@ -61,7 +62,7 @@ static void runTest()
 				printf("Error in LSAddWord return value.");
 				printf(" Actual: %d Expected: %d\n",
 					status,KWSUCCESS);
-				errorCount++;
+				error = 1;
 			}
 		}
 	}
@@ -74,12 +75,12 @@ int main()
 
 	runTest();
 
-	while(1){
+	while(!error){
 		printf("check that LSReset runs without crashing\n");
 		LSReset();
 
 		printf("run the tests again\n");
 		runTest();
 	}
-	return errorCount;
+	return error;
 }
