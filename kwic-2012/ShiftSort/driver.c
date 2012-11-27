@@ -117,7 +117,7 @@ static void runTest()
 int main()
 {
 	SSInit();
-
+	LSInit();
 	printf("invoke SSShiftSort\n");
 	SSShiftSort();
 	printf("run the tests\n");
