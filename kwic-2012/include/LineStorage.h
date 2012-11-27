@@ -1,8 +1,8 @@
 /********** LineStorage module---interface specification **********/
 
 /***** overview *****
-The LineStorage module stores a list of lines, where each line is a
-list of C strings.  The lines and the words within a line are indexed
+The LineStorage module stores a list of lines, where each line has a
+list of char*.  The lines and the words within a line are indexed
 zero-relative.
 
 Lines are added a word at a time, in an append-only fashion.  Each word
@@ -49,18 +49,18 @@ KWStatus LSAddLine(void);
 KWStatus LSAddWord(char* word);
 
 /*
-* if lineNum in [0..LSNumLines()-1] and wordNum in [0..LSNumWords()-1] then
-*	return word wordNum from line lineNum
+* if lineNum is not in [0..LSNumLines()-1] and wordNum in [0..LSNumWords()-1] then
+*   return NULL
 * else
-*	return NULL
+*	return word wordNum from line lineNum
 */
 const char* LSGetWord(int lineNum,int wordNum);
 
 /*
-* if lineNum in [0..LSNumLines()-1] then
-*	return the number of words in line lineNum
+* if lineNum is not in [0..LSNumLines()-1] then
+*   return KWRANGEERR
 * else
-*	return KWRANGEERR
+*	return the number of words in line lineNum
 */
 int LSNumWords(int lineNum);
 
