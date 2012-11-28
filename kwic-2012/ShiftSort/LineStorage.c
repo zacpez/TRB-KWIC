@@ -30,6 +30,11 @@ static struct {
 
 /*****exported functions*****/
 
+void LSInit(void)
+{
+  /* intentionally empty */
+}
+
 int LSNumLines(void)
 {
 	return NUMLINES;
