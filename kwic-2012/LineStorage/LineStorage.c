@@ -55,7 +55,6 @@ struct Line{
 
 3. All of the dynamic memory allocated by LineStorage (and not yet freed)
    is in the List structure pointed to by line.
-*/
 
 /***** local functions *****/
 
@@ -143,7 +142,7 @@ KWStatus LSAddWord(char* word)
 	int stringSize = 5;
 
 	int charCount;
-	for(charCount = 0; word[charCount] != 0; charCount++){
+	for(charCount = 0; word[charCount] != '\0'; charCount++){
 
 		// if out of space for string, reallocate 2 times current size
 		if (charCount == stringSize){
