@@ -4,13 +4,15 @@
 #include "kwic.h"
 #include "LineStorage.h"
 
-#define NUMLINES 16
-#define MAXWORDS 8
+#define NUMLINES 18
+#define MAXWORDS 20
 
 struct {
 	int numWords;
 	char* wordList[MAXWORDS];
 } lineList[NUMLINES] = {
+	{20, "1","2","3","4","5","6","7","8","9","1","1","2","3","4","5","6","7","8","9","2"},
+	{1,"1234567891123456789212345678931234567894"},
 	{5,"The","Cat","in","the","Hat"},
 	{4,"The","C","Programming","Language"},
 	{0},
