@@ -30,7 +30,8 @@ void OUPrint(void)
 		int numWords = SSNumWords(curLine);
                 int shiftNum = SSGetShiftNum(curLine);
 		numChars = 0;
-		// get num of chars after rotate
+
+		// get num of chars after rotate for padding output
 		for (curWord = numWords-shiftNum; curWord < numWords; curWord++) {
 			getWord = SSGetWord(curLine, curWord);
 			numCharsGetWord = 0;
@@ -39,11 +40,14 @@ void OUPrint(void)
 			// +1 for space after word
 			numChars++;
 		}
-		// add spaces
+
+		// pad with spaces
 		while(40 - numChars++ > 0)
 			printf(" ");
+
 		for (curWord = numWords-shiftNum; curWord < numWords; curWord++)
 			printf("%s ", SSGetWord(curLine, curWord));
+
 		printf("%s", SSGetWord(curLine, 0));
 		for(curWord = 1; curWord < numWords-shiftNum; curWord++)
 			printf(" %s", SSGetWord(curLine, curWord));

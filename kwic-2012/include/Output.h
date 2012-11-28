@@ -17,7 +17,8 @@ void OUInit(void);
 
 /*
 Write the lines provided by the ShiftSort module to stdout.
-Assumption: OUInit has been called.
+Assumption: 	OUInit has been called.
+		all Lines are =< 40 chars
 */
 void OUPrint(void);
 
@@ -34,13 +35,9 @@ And the following calls are invoked:
 	OUPrint();
 
 Then invoking OUPrint will write the following lines to stdout:
-	C Programming Language, The
-	Cat in the Hat, The
-	Hat, The Cat in the
-	Language, The C Programming
-	Programming Language, The C
-	The C Programming Language
-	The Cat in the Hat
-	in the Hat, The Cat
-	the Hat, The Cat in
+                                    The C Programming Language
+                                    The Cat in the Hat
+	                 The Cat in the Hat
+	              The C Programming Language
+	                          The C Programming Language
 */
