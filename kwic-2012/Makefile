@@ -71,29 +71,32 @@ prof: kwic
 
 runtest: kwic
 # test each module first
+	rm -f gcov_summary.txt
 	for m in $(MODULES); do \
-		( cd $$m; $(MAKE) 'CFLAGS=$(CFLAGS)' runtest; ) \
+		( cd $$m; $(MAKE) 'CFLAGS=$(CFLAGS)' gcov; rm -f list.o) \
 	done
 #
 # now test the whole kwic program
-	rm -f actualOutput/*;
+	rm -r -f actualOutput/
+	mkdir actualOutput
 #
 # ***** use different lines files
-# input/test0 from stdin
-	./kwic -n noiseWordsThe < input/test0 > actualOutput/test0
-	-diff actualOutput/test0 expectedOutput/test0
-# input/test0 as command line argument
-	./kwic -n noiseWordsThe input/test0 > actualOutput/test0a
-	-diff actualOutput/test0 expectedOutput/test0
-# input/test0 and input/test1 as command line arguments
-	./kwic -n noiseWordsThe input/test0 input/test1 > actualOutput/test0test1
-	-diff actualOutput/test0test1 expectedOutput/test0test1
+# input/test1 from stdin
+	./kwic -n noiseWords < input/test1 > actualOutput/test1
+	-diff actualOutput/test1 expectedOutput/test1
+	gprof kwic > ProfileReportTest1
+
+# input/test2 as command line argument
+	./kwic -n noiseWords input/test2 > actualOutput/test2
+	-diff actualOutput/test2 expectedOutput/test2
+	gprof kwic > ProfileReportTest2
+
+# input/test3 as command line arguments
+	./kwic -n noiseWords input/test3 > actualOutput/test3
+	-diff actualOutput/test3 expectedOutput/test3
+	gprof kwic > ProfileReportTest3
 #
 # ***** use different noise words files
-# default file
-	./kwic input/test0 > actualOutput/noiseWords0
-	-diff actualOutput/noiseWords0 expectedOutput/noiseWords0
-#
 # -n argument
 	./kwic -n noiseWordsThe input/test0 > actualOutput/noiseWords1
 	-diff actualOutput/noiseWords1 expectedOutput/noiseWords1

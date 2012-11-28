@@ -1,7 +1,7 @@
 INC = ../include
 
 XCFLAGS = -I$(INC) ## extra C flags
-CFLAGS = -g	## a suitable option for the runtest
+CFLAGS = -p -g	## a suitable option for the runtest
 
 CC = gcc $(XCFLAGS)
 
@@ -15,7 +15,7 @@ gcov: driver.o WordTable.o
 	$(CC) -fprofile-arcs -ftest-coverage -c WordTable.c
 	$(CC) -fprofile-arcs -ftest-coverage -o driver driver.o WordTable.o
 	./driver
-	gcov WordTable.c
+	gcov WordTable.c >> ../gcov_summary.txt
 	rm -f list.o # gcov version is dangerous to leave around
 
 export: WordTable.o

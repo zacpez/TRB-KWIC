@@ -1,6 +1,6 @@
 INC = ../include
 
-XCFLAGS = -I$(INC)## extra C flags
+XCFLAGS = -I$(INC) -p -g ## extra C flags
 
 CC = gcc $(XCFLAGS)
 
@@ -14,7 +14,7 @@ gcov: driver.o ShiftSort.o LineStorage.o WordTable.o
 	$(CC) -fprofile-arcs -ftest-coverage -c ShiftSort.c
 	$(CC) -fprofile-arcs -ftest-coverage -o driver driver.o ShiftSort.o LineStorage.o WordTable.o
 	./driver
-	gcov ShiftSort.c
+	gcov ShiftSort.c >> ../gcov_summary.txt
 	rm -f list.o # gcov version is dangerous to leave around
 
 prof: 

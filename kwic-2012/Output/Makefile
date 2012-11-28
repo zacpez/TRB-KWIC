@@ -1,6 +1,6 @@
 INC = ../include
 
-XCFLAGS = -I$(INC)	## local C flags
+XCFLAGS = -I$(INC) -p -g	## local C flags
 
 CC = gcc $(XCFLAGS)
 
@@ -15,7 +15,7 @@ gcov: driver.o Output.o ShiftSort.o
 	$(CC) -fprofile-arcs -ftest-coverage -c Output.c
 	$(CC) -fprofile-arcs -ftest-coverage -o driver driver.o Output.o ShiftSort.o
 	./driver > /dev/null
-	gcov Output.c
+	gcov Output.c >> ../gcov_summary.txt
 	rm -f list.o # gcov version is dangerous to leave around
 
 export: Output.o
@@ -31,4 +31,4 @@ ShiftSort.o: $(INC)/kwic.h $(INC)/ShiftSort.h ShiftSort.c
 	$(CC) -c $(CFLAGS) ShiftSort.c
 
 clean:
-	rm -f *.o actualOutput driver *.gcov *.gcda *.gcno
+	rm -f *.o actualOutput driver *.gcov *.gcda *.gcno gmon.out

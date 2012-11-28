@@ -1,6 +1,6 @@
 INC = ../include
 
-XCFLAGS = -I$(INC)	## extra C flags
+XCFLAGS = -I$(INC) -p -g	## extra C flags
 
 CC = gcc $(XCFLAGS)
 
@@ -25,7 +25,7 @@ gcov: driver.o Input.o LineStorage.o
 	$(CC) -fprofile-arcs -ftest-coverage -c Input.c
 	$(CC) -fprofile-arcs -ftest-coversge -o driver driver.o Input.o LineStorage.o
 	$(RUNTEST)
-	gcov Input.c
+	gcov Input.c >> ../gcov_summary.txt
 	rm -f list.o # gcov version is dangerous to leave around
 
 export: Input.o

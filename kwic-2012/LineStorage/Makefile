@@ -4,7 +4,7 @@ XCFLAGS = -I$(INC) ## extra C flags
 
 CC = gcc $(XCFLAGS)
 
-CFLAGS = -g
+CFLAGS = -g -p
 
 driver: driver.o LineStorage.o
 	$(CC) -o driver driver.o LineStorage.o
@@ -19,7 +19,7 @@ gcov: driver.o LineStorage.o
 	$(CC) -fprofile-arcs -ftest-coverage -c LineStorage.c
 	$(CC) -fprofile-arcs -ftest-coverage -o driver driver.o LineStorage.o
 	./driver
-	gcov LineStorage.c
+	gcov LineStorage.c >> ../gcov_summary.txt
 	rm -f lineStroage.o # gcov version is dangerous to leave around
 
 export: LineStorage.o
