@@ -6,8 +6,10 @@
 #include "ShiftSort.h"
 
 
-#define MAXLINE 40
 /***** local constants *****/
+
+// Assumed max number of chars on a line
+#define OUMAXLINE 40
 
 /***** local types *****/
 
@@ -42,7 +44,7 @@ void OUPrint(void)
 		}
 
 		// pad with spaces
-		while(40 - numChars++ > 0)
+		while(OUMAXLINE - numChars++ > 0)
 			printf(" ");
 
 		for (curWord = numWords-shiftNum; curWord < numWords; curWord++)
