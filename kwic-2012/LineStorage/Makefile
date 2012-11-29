@@ -19,7 +19,8 @@ gcov: driver.o LineStorage.o
 	$(CC) -fprofile-arcs -ftest-coverage -c LineStorage.c
 	$(CC) -fprofile-arcs -ftest-coverage -o driver driver.o LineStorage.o
 	./driver
-	gcov LineStorage.c >> ../gcov_summary.txt
+	gcov LineStorage.c >> gcov_summary.txt
+	cat gcov_summary.txt
 	rm -f lineStroage.o # gcov version is dangerous to leave around
 
 export: LineStorage.o
@@ -34,4 +35,4 @@ memtest.o: $(INC)/kwic.h $(INC)/LineStorage.h memtest.c
 	$(CC) -c $(CFLAGS) memtest.c
 
 clean:
-	rm -f *.o act/* driver *.gcov *.gcda *.gcno memtest
+	rm -f *.o act/* driver *.gcov *.gcda *.gcno memtest gcov_summary.txt

@@ -15,7 +15,8 @@ gcov: driver.o WordTable.o
 	$(CC) -fprofile-arcs -ftest-coverage -c WordTable.c
 	$(CC) -fprofile-arcs -ftest-coverage -o driver driver.o WordTable.o
 	./driver
-	gcov WordTable.c >> ../gcov_summary.txt
+	gcov WordTable.c >> gcov_summary.txt
+	cat gcov_summary.txt
 	rm -f list.o # gcov version is dangerous to leave around
 
 export: WordTable.o
@@ -27,4 +28,4 @@ WordTable.o: $(INC)/kwic.h $(INC)/WordTable.h WordTable.c
 	$(CC) -c $(CFLAGS) WordTable.c
 
 clean:
-	rm -f *.o act/* driver  *.gcov *.gcda *.gcno
+	rm -f *.o act/* driver  *.gcov *.gcda *.gcno gcov_summary.txt
