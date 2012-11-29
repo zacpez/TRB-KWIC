@@ -59,18 +59,19 @@ static const char* getWord(LineListPtr linePtr,int wordNum)
 static int lineCompare(LineListPtr line0,LineListPtr line1)
 {
         int i,j,minNumWords,minLine;
-
-        if (LSNumWords(line0->lineNum) < LSNumWords(line1->lineNum))
-                minNumWords = LSNumWords(line0->lineNum);
+	int line0NumWords = LSNumWords(line0->lineNum);
+	int line1NumWords = LSNumWords(line1->lineNum);
+        if (line0NumWords < line1NumWords)
+                minNumWords = line0NumWords;
         else
-                minNumWords = LSNumWords(line1->lineNum);
+                minNumWords = line1NumWords;
         for (i = 0; i < minNumWords; i++) {
                 j = strcmp(getWord(line0,i),getWord(line1,i));
                 if (j != 0)
                         return j;
         }
         /* assert: line0 and line1 are equal for the first min words */
-        return LSNumWords(line0->lineNum) - LSNumWords(line1->lineNum);
+        return line0NumWords - line1NumWords;
 }
 
 /*****exported functions*****/
@@ -92,38 +93,31 @@ void SSReset(void)
 KWStatus SSShiftSort(void)
 {
         int i,j,k;
+	
+	lineCount = 0;
+	int lineListSize = 1;
+	if(!(lineList = malloc(sizeof(LineList))))
+		return KWMEMORYERROR;
 
         /* compute the size of lineList */
-        lineCount = 0;
-        for (i = 0; i < LSNumLines(); i++) {
-		for (j = 0; j < LSNumWords(i); j++) {
+	int numLines = LSNumLines();
+        for (i = 0; i < numLines; i++) {
+		int numWords = LSNumWords(i);
+		for (j = 0; j < numWords; j++) {
 			/* exclude lines that start with a noise word */
-			if (!WTIsMember(LSGetWord(i,j)))
+			if (!WTIsMember(LSGetWord(i,j))){
+				if(lineCount == lineListSize){
+					if(!(lineList = realloc(lineList, sizeof(lineList)*lineListSize*2)))
+						return KWMEMORYERROR;
+					lineListSize *= 2;
+				}
+				lineList[lineCount].lineNum = i;
+				lineList[lineCount].shiftNum = j;
 				lineCount++;
+			}
 		}
         }
-
-        /* allocate space for lineList */
-        lineList = calloc(lineCount, sizeof(LineList));
-        if (lineList == NULL) {
-		lineCount = 0;
-                return KWMEMORYERROR;
-	}
-
-        /* fill lineList */
-        k = 0;
-        for (i = 0; i < LSNumLines(); i++) {
-                for (j = 0; j < LSNumWords(i); j++) {
-			/* exclude lines that start with a noise word */
-			if (!WTIsMember(LSGetWord(i,j))) {
-				lineList[k].lineNum = i;
-				lineList[k].shiftNum = j;
-				k++;
-			}
-                }
-        }
-
-        /* sort the shifted lines */
+        // sort the shifted lines 
         qsort(lineList,lineCount,sizeof(LineList),
                 (int (*)(const void *, const void *))lineCompare);
 
