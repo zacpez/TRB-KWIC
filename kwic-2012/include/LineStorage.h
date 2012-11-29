@@ -50,7 +50,7 @@ KWStatus LSAddWord(char* word);
 
 /*
 * if lineNum is not in [0..LSNumLines()-1] and wordNum in [0..LSNumWords()-1] then
-*   return NULL
+*       return NULL
 * else
 *	return word wordNum from line lineNum
 */
@@ -58,7 +58,7 @@ const char* LSGetWord(int lineNum,int wordNum);
 
 /*
 * if lineNum is not in [0..LSNumLines()-1] then
-*   return KWRANGEERR
+*       return KWRANGEERR
 * else
 *	return the number of words in line lineNum
 */
