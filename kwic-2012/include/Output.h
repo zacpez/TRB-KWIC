@@ -17,8 +17,8 @@ void OUInit(void);
 
 /*
 Write the lines provided by the ShiftSort module to stdout.
-Assumption: 	OUInit has been called.
-		all Lines are =< 40 chars
+Assumption:     OUInit has been called.
+                All Lines are =< 40 chars.
 */
 void OUPrint(void);
 
