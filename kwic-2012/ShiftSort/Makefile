@@ -1,6 +1,8 @@
 INC = ../include
 
-XCFLAGS = -I$(INC) -p -g ## extra C flags
+XCFLAGS = -I$(INC) ## extra C flags
+
+CFLAGS = -p -g
 
 CC = gcc $(XCFLAGS)
 

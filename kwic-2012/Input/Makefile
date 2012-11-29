@@ -1,22 +1,27 @@
 INC = ../include
 
-XCFLAGS = -I$(INC) -p -g	## extra C flags
+XCFLAGS = -I$(INC) ## extra C flags
+
+CFLAGS = -p -g
 
 CC = gcc $(XCFLAGS)
 
 RUNTEST = - (rm -f actualOutput/*; \
 	cd input; \
 	for f in *; do \
-		echo input file: $$f passed through stdin; \
-		../driver < $$f >../actualOutput/$$f; \
-		diff ../actualOutput/$$f ../expectedOutput/$$f; \
-		echo input file: $$f; \
-		../driver $$f >../actualOutput/$$f; \
-		diff ../actualOutput/$$f ../expectedOutput/$$f; \
+		(\
+			cd ..\
+			echo input file: $$f passed through stdin; \
+			./driver < ./input/$$f > ./actualOutput/$$f; \
+			diff ./actualOutput/$$f ./expectedOutput/$$f; \
+			echo input file: $$f; \
+			./driver ./input/$$f > ./actualOutput/$$f; \
+			diff ./actualOutput/$$f ./expectedOutput/$$f; \
+		)\
 	done)
 
 driver: driver.o Input.o LineStorage.o
-	$(CC) -o driver driver.o Input.o LineStorage.o
+	$(CC) $(CFLAGS) -o driver driver.o Input.o LineStorage.o
 
 runtest: driver
 	$(RUNTEST)
