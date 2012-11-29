@@ -11,13 +11,13 @@ driver: driver.o WordTable.o
 runtest: driver
 	./driver
 
-gcov: driver.o WordTable.o
+gcov: driver.o WordTable.c
 	$(CC) -fprofile-arcs -ftest-coverage -c WordTable.c
 	$(CC) -fprofile-arcs -ftest-coverage -o driver driver.o WordTable.o
 	./driver
-	gcov WordTable.c >> gcov_summary.txt
+	gcov WordTable.c > gcov_summary.txt
 	cat gcov_summary.txt
-	rm -f list.o # gcov version is dangerous to leave around
+	rm -f *.o # gcov version is dangerous to leave around
 
 export: WordTable.o
 

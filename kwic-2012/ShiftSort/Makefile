@@ -10,13 +10,13 @@ driver: driver.o ShiftSort.o LineStorage.o WordTable.o
 runtest: driver
 	./driver
 
-gcov: driver.o ShiftSort.o LineStorage.o WordTable.o
+gcov: driver.o ShiftSort.c LineStorage.o WordTable.o
 	$(CC) -fprofile-arcs -ftest-coverage -c ShiftSort.c
 	$(CC) -fprofile-arcs -ftest-coverage -o driver driver.o ShiftSort.o LineStorage.o WordTable.o
 	./driver
-	gcov ShiftSort.c >> gcov_summary.txt
+	gcov ShiftSort.c > gcov_summary.txt
 	cat gcov_summary.txt
-	rm -f list.o # gcov version is dangerous to leave around
+	rm -f *.o # gcov version is dangerous to leave around
 
 prof: 
 	$(CC) -pg -o driver driver.c ShiftSort.c LineStorage.c WordTable.c

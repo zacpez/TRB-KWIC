@@ -21,13 +21,13 @@ driver: driver.o Input.o LineStorage.o
 runtest: driver
 	$(RUNTEST)
 
-gcov: driver.o Input.o LineStorage.o
+gcov: driver.o Input.c LineStorage.o
 	$(CC) -fprofile-arcs -ftest-coverage -c Input.c
 	$(CC) -fprofile-arcs -ftest-coversge -o driver driver.o Input.o LineStorage.o
 	$(RUNTEST)
-	gcov Input.c >> gcov_summary.txt
+	gcov Input.c > gcov_summary.txt
 	cat gcov_summary.txt
-	rm -f list.o # gcov version is dangerous to leave around
+	rm -f *.o # gcov version is dangerous to leave around
 
 export: Input.o
 

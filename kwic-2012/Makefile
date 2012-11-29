@@ -73,7 +73,7 @@ runtest: kwic
 # test each module first
 	rm -f gcov_summary.txt
 	for m in $(MODULES); do \
-		( cd $$m; $(MAKE) 'CFLAGS=$(CFLAGS)' gcov; rm -f list.o; cat gcov_summary.txt >> ../gcov_summary.txt) \
+		( cd $$m; $(MAKE) 'CFLAGS=$(CFLAGS)' gcov; cat gcov_summary.txt >> ../gcov_summary.txt) \
 	done
 #
 # now test the whole kwic program

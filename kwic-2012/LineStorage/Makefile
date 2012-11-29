@@ -15,13 +15,13 @@ memtest: memtest.o LineStorage.o
 runtest: driver
 	./driver
 
-gcov: driver.o LineStorage.o
+gcov: driver.o LineStorage.c
 	$(CC) -fprofile-arcs -ftest-coverage -c LineStorage.c
 	$(CC) -fprofile-arcs -ftest-coverage -o driver driver.o LineStorage.o
 	./driver
-	gcov LineStorage.c >> gcov_summary.txt
+	gcov LineStorage.c > gcov_summary.txt
 	cat gcov_summary.txt
-	rm -f lineStroage.o # gcov version is dangerous to leave around
+	rm -f *.o # gcov version is dangerous to leave around
 
 export: LineStorage.o
 
